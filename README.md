@@ -2,6 +2,12 @@
 
 An API to always get the latest assets from a github release.
 
+## Usage
+
+```bash
+curl -LO https://example.com/github/:owner/:repo/:asset-name
+```
+
 ## Roadmap
 
 * Include latest assets from GitLab
