@@ -76,7 +76,6 @@ class ConfigProvider
     {
         $service = BeanFactoryRegistry::getInstance()->get(GithubService::class);
 
-        error_log(get_class($service));
         return new GithubHandler(
             $service
         );

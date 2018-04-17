@@ -14,7 +14,7 @@ if [ `uname` = 'Darwin' ] ; then
 fi
 git archive --format=tar $TAG | tar x -C tmp
 cd tmp
-composer install --no-dev --prefer-dist
+composer update --no-dev --prefer-dist
 
 tar czf $HASH.tgz .
 
@@ -22,7 +22,7 @@ scp -r ./$HASH.tgz $SERVER:/var/www/com.getlatestassets.api/$HASH.tgz
 ssh $SERVER mkdir -p "/var/www/com.getlatestassets.api/$HASH"
 ssh $SERVER tar xz -f "/var/www/com.getlatestassets.api/$HASH.tgz" -C "/var/www/com.getlatestassets.api/$HASH" && echo "Extracted tgz"
 ssh $SERVER rm -rf "/var/www/com.getlatestassets.api/$HASH.tgz" && echo "Removed tgz"
-ssh $SERVER ln -sf "/var/www/com.getlatestassets.api/$HASH" "/var/www/com.getlatestassets.api/current" && echo "Set symbolic link"
+ssh $SERVER cd "/var/www/com.getlatestassets.api" && rm current && ln -sf "$HASH" "current" && echo "Set symbolic link"
 
 cd ..
 

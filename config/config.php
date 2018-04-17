@@ -12,7 +12,12 @@ $cacheConfig = [
     'config_cache_path' => 'data/cache/config-cache.php',
 ];
 
-$aggregator = new ConfigAggregator([
+define(
+    'GETLATESTASSETS_HOME',
+    getenv('GETLATESTASSETS_HOME')??realpath(dirname(__DIR__ ) . '/data')
+);
+
+$config = [
     \Zend\Expressive\Router\FastRouteRouter\ConfigProvider::class,
     \Zend\HttpHandlerRunner\ConfigProvider::class,
     // Include cache configuration
@@ -22,17 +27,15 @@ $aggregator = new ConfigAggregator([
     \Zend\Expressive\ConfigProvider::class,
     \Zend\Expressive\Router\ConfigProvider::class,
 
-    // Load application config in a pre-defined order in such a way that local settings
-    // overwrite global settings. (Loaded as first to last):
-    //   - `global.php`
-    //   - `*.global.php`
-    //   - `local.php`
-    //   - `*.local.php`
     new PhpFileProvider(realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php'),
-
-    // Load development config if it exists
     new PhpFileProvider(realpath(__DIR__) . '/development.config.php'),
-], $cacheConfig['config_cache_path']);
+    new PhpFileProvider(GETLATESTASSETS_HOME . '/config/{{,*.}local}.php'),
+];
+
+$aggregator = new ConfigAggregator(
+    $config,
+    $cacheConfig['config_cache_path']
+);
 
 defined('APPLICATION_ENVIRONMENT') || define('APPLICATION_ENVIRONMENT', ($config['environment']) ?? 'production');
 
