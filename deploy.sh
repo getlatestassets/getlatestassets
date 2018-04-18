@@ -8,6 +8,7 @@ export VERSION="`git describe --tags | cut -d "-" -f 1`"
 TAG=`git describe --tags --abbrev=0`
 TAG="master"
 HASH=`git rev-parse $TAG`
+echo "Deploying $HASH"
 SED="sed -i "
 if [ `uname` = 'Darwin' ] ; then
     SED="sed -i \"\""
