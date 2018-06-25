@@ -6,7 +6,7 @@
  * Time: 20:55
  */
 
-namespace Org_Heigl\GetLatestAssetsTest;
+namespace Org_Heigl\GetLatestAssetsTest\Service;
 
 use Org_Heigl\GetLatestAssets\Exception\NoAssetMatchingConstraintFound;
 use Org_Heigl\GetLatestAssets\Release\Release;

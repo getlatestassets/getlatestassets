@@ -20,10 +20,11 @@ composer update --no-dev --prefer-dist
 tar czf $HASH.tgz .
 
 scp -r ./$HASH.tgz $SERVER:/var/www/com.getlatestassets.api/$HASH.tgz
-ssh $SERVER mkdir -p "/var/www/com.getlatestassets.api/$HASH"
-ssh $SERVER tar xz -f "/var/www/com.getlatestassets.api/$HASH.tgz" -C "/var/www/com.getlatestassets.api/$HASH" && echo "Extracted tgz"
-ssh $SERVER rm -rf "/var/www/com.getlatestassets.api/$HASH.tgz" && echo "Removed tgz"
-ssh $SERVER cd "/var/www/com.getlatestassets.api" && rm current && ln -sf "$HASH" "current" && echo "Set symbolic link"
+ssh $SERVER 'mkdir -p "/var/www/com.getlatestassets.api/$HASH"'
+ssh $SERVER 'tar xz -f "/var/www/com.getlatestassets.api/$HASH.tgz" -C "/var/www/com.getlatestassets.api/$HASH" && echo "Extracted tgz"'
+ssh $SERVER 'rm -rf "/var/www/com.getlatestassets.api/$HASH.tgz" && echo "Removed tgz"'
+ssh $SERVER 'cd "/var/www/com.getlatestassets.api" && rm current && ln -s "$HASH" "current" && echo "Set symbolic link"'
+ssh $SERVER ls -tl -I home -I current | sed /^total/d |  tail -n +3 | cut -d " " -f 9 | rm -rf && echo "Removed obsolete folders"
 
 cd ..
 
