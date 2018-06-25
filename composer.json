@@ -42,8 +42,10 @@
     "require": {
         "php": "^7.2",
         "bitexpert/disco": "^0.10.0",
+        "composer/semver": "^1.4",
         "filp/whoops": "^2.1.12",
         "guzzlehttp/guzzle": "^6.3",
+        "org_heigl/trait-iterator": "^1.0",
         "roave/security-advisories": "dev-master",
         "zendframework/zend-component-installer": "^2.1.1",
         "zendframework/zend-config-aggregator": "^1.0",
@@ -55,6 +57,7 @@
         "zendframework/zend-stdlib": "^3.1"
     },
     "require-dev": {
+        "mockery/mockery": "^1.1",
         "phpunit/phpunit": "^7.0.1",
         "squizlabs/php_codesniffer": "^2.9.1",
         "tm/tooly-composer-script": "^1.2",

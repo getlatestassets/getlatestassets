@@ -64,6 +64,9 @@ class GithubService
 
         $result = json_decode($result->getBody()->getContents(), true);
 
+        $versionConstraint = null;
+        $this->versionService->getLatestAssetForConstraintFromResult($result, $versionConstraint);
+
         if (! isset($result['assets'])) {
             throw new NoAssetsFound(sprintf(
                 'There are no assets available for release %1$s at %2$s',
