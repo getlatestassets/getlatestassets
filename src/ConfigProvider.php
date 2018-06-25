@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 use Org_Heigl\GetLatestAssets\Handler\GithubHandler;
 use Org_Heigl\GetLatestAssets\Handler\PingHandler;
 use Org_Heigl\GetLatestAssets\Service\GithubService;
+use Org_Heigl\GetLatestAssets\Service\VersionService;
 
 /**
  * @Configuration
@@ -64,7 +65,7 @@ class ConfigProvider
             ]
         ]);
 
-        return new GithubService($client);
+        return new GithubService($client, new VersionService());
     }
 
     /**

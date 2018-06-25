@@ -24,8 +24,13 @@ class GithubHandler implements RequestHandlerInterface
         $user    = filter_var($request->getAttribute('user'), FILTER_SANITIZE_STRING);
         $project = filter_var($request->getAttribute('project'), FILTER_SANITIZE_STRING);
         $file    = filter_var($request->getAttribute('name'), FILTER_SANITIZE_STRING);
+        $query   = $request->getQueryParams();
+        $constraint = null;
+        if (isset($query['version'])) {
+            $constraint = filter_var($query['version'], FILTER_SANITIZE_STRING);
+        }
 
-        $url = ($this->service)($user, $project, $file);
+        $url = ($this->service)($user, $project, $file, $constraint);
 
         return new RedirectResponse($url);
     }
