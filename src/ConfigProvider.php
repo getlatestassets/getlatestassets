@@ -12,6 +12,7 @@ use bitExpert\Disco\BeanFactoryRegistry;
 use GuzzleHttp\Client;
 use Org_Heigl\GetLatestAssets\Handler\GithubHandler;
 use Org_Heigl\GetLatestAssets\Handler\PingHandler;
+use Org_Heigl\GetLatestAssets\Service\ConvertGithubReleaseListService;
 use Org_Heigl\GetLatestAssets\Service\GithubService;
 use Org_Heigl\GetLatestAssets\Service\VersionService;
 
@@ -65,7 +66,7 @@ class ConfigProvider
             ]
         ]);
 
-        return new GithubService($client, new VersionService());
+        return new GithubService($client, new VersionService(), new ConvertGithubReleaseListService());
     }
 
     /**
