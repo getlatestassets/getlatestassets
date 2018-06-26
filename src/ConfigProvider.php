@@ -39,14 +39,6 @@ class ConfigProvider
                     'template_error' => 'error::error',
                 ],
             ],
-            'routes'               => [
-                [
-                    'name'            => 'api.ping',
-                    'path'            => '/api/ping',
-                    'middleware'      => PingHandler::class,
-                    'allowed_methods' => ['GET'],
-                ],
-            ],
         ];
 
         return array_merge($defaultConfig, $expressiveConfig);
