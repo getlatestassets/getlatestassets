@@ -22,6 +22,8 @@ class DevConfigProvider extends ConfigProvider
      */
     public function getZendExpressiveMiddlewareErrorResponseGenerator() : WhoopsErrorResponseGenerator
     {
-        return (new \Zend\Expressive\Container\WhoopsErrorResponseGeneratorFactory())(BeanFactoryRegistry::getInstance());
+        return (new \Zend\Expressive\Container\WhoopsErrorResponseGeneratorFactory())(
+            BeanFactoryRegistry::getInstance()
+        );
     }
 }

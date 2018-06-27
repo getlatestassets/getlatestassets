@@ -49,7 +49,7 @@ class ConfigProvider
      *     @Alias({"name" = "Org_Heigl\GetLatestAssets\Service\GithubService"})
      * }})
      */
-    public function getOrg_HeiglGetLatestAssetsServiceGithubService() : GithubService
+    public function getOrgHeiglGetLatestAssetsServiceGithubService() : GithubService
     {
         $client = new Client([
             'base_uri' => 'https://api.github.com',
@@ -66,7 +66,7 @@ class ConfigProvider
      *     @Alias({"name" = "Org_Heigl\GetLatestAssets\Handler\GithubHandler"})
      * }})
      */
-    public function getOrg_HeiglGetLatestAssetsHandlerGithubHandler() : GithubHandler
+    public function getOrgHeiglGetLatestAssetsHandlerGithubHandler() : GithubHandler
     {
         $service = BeanFactoryRegistry::getInstance()->get(GithubService::class);
 
@@ -74,5 +74,4 @@ class ConfigProvider
             $service
         );
     }
-
 }

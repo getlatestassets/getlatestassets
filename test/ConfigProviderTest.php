@@ -36,7 +36,7 @@ class ConfigProviderTest extends TestCase
     }
 
     /**
-     * @covers \Org_Heigl\GetLatestAssets\ConfigProvider::getOrg_HeiglGetLatestAssetsServiceGithubService
+     * @covers \Org_Heigl\GetLatestAssets\ConfigProvider::getOrgHeiglGetLatestAssetsServiceGithubService
      */
     public function testgettingGithubService()
     {
@@ -44,12 +44,12 @@ class ConfigProviderTest extends TestCase
 
         self::assertInstanceOf(
             GithubService::class,
-            $config->getOrg_HeiglGetLatestAssetsServiceGithubService()
+            $config->getOrgHeiglGetLatestAssetsServiceGithubService()
         );
     }
 
     /**
-     * @covers \Org_Heigl\GetLatestAssets\ConfigProvider::getOrg_HeiglGetLatestAssetsHandlerGithubHandler
+     * @covers \Org_Heigl\GetLatestAssets\ConfigProvider::getOrgHeiglGetLatestAssetsHandlerGithubHandler
      */
     public function testGEttingGithubHandler()
     {
@@ -57,7 +57,7 @@ class ConfigProviderTest extends TestCase
 
         self::assertInstanceof(
             GithubHandler::class,
-            $config->getOrg_HeiglGetLatestAssetsHandlerGithubHandler()
+            $config->getOrgHeiglGetLatestAssetsHandlerGithubHandler()
         );
     }
 }

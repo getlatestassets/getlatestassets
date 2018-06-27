@@ -29,7 +29,6 @@ class ConvertGithubReleaseListService
             }
 
             $list->addRelease(new Release($version, ...$files));
-
         }
         return $list;
     }
