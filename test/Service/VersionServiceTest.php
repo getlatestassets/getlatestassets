@@ -18,7 +18,10 @@ use Mockery as M;
 class VersionServiceTest extends TestCase
 {
 
-    /** @dataProvider getLatestAssetForConstraintFromResultProvider */
+    /**
+     * @dataProvider getLatestAssetForConstraintFromResultProvider
+     * @covers \Org_Heigl\GetLatestAssets\Service\VersionService::getLatestAssetForConstraintFromResult
+     */
     public function testGetLatestAssetForConstraintFromResult($list, $constraint, $result)
     {
         $array = [];

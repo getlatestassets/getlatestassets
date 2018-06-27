@@ -25,8 +25,8 @@
         },
         "tools": {
             "phpcs": {
-                "url": "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/3.2.3/phpcs.phar",
-                "sign-url": "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/3.2.3/phpcs.phar.asc"
+                "url": "https://api.getlatestassets.com/github/squizlabs/PHP_CodeSniffer/phpcs.phar?version=^3.2",
+                "sign-url": "https://api.getlatestassets.com/github/squizlabs/PHP_CodeSniffer/phpcs.phar.ascversion=^3.2"
             },
             "security-checker": {
                 "url": "http://get.sensiolabs.org/security-checker.phar",
@@ -85,8 +85,8 @@
         ],
         "analyze": "phpstan analyze -l max -c ./phpstan.installer.neon ./src ./config",
         "clear-config-cache": "php bin/clear-config-cache.php",
-        "cs-check": "phpcs",
-        "cs-fix": "phpcbf",
+        "cs-check": "./vendor/bin/phpcs",
+        "cs-fix": "./vendor/bin/phpcbf",
         "serve": "php -S 0.0.0.0:8080 -t public/",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"

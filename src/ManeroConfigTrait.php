@@ -10,8 +10,50 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Parameter;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
+use Zend\Expressive\Application;
+use Zend\Expressive\Container\ApplicationFactory;
+use Zend\Expressive\Container\ApplicationPipelineFactory;
+use Zend\Expressive\Container\EmitterFactory;
+use Zend\Expressive\Container\ErrorHandlerFactory;
+use Zend\Expressive\Container\MiddlewareContainerFactory;
+use Zend\Expressive\Container\MiddlewareFactoryFactory;
+use Zend\Expressive\Container\NotFoundHandlerFactory;
+use Zend\Expressive\Container\RequestHandlerRunnerFactory;
+use Zend\Expressive\Container\ResponseFactoryFactory;
+use Zend\Expressive\Container\ServerRequestErrorResponseGeneratorFactory;
+use Zend\Expressive\Container\ServerRequestFactoryFactory;
+use Zend\Expressive\Container\StreamFactoryFactory;
+use Zend\Expressive\Container\WhoopsFactory;
+use Zend\Expressive\Container\WhoopsPageHandlerFactory;
+use Zend\Expressive\Handler\NotFoundHandler;
 use Zend\Expressive\Helper\ServerUrlHelper;
+use Zend\Expressive\Helper\UrlHelperMiddleware;
+use Zend\Expressive\Helper\UrlHelperMiddlewareFactory;
+use Zend\Expressive\MiddlewareContainer;
+use Zend\Expressive\MiddlewareFactory;
+use Zend\Expressive\Response\ServerRequestErrorResponseGenerator;
+use Zend\Expressive\Router\Middleware\DispatchMiddleware;
+use Zend\Expressive\Router\Middleware\DispatchMiddlewareFactory;
+use Zend\Expressive\Router\Middleware\ImplicitHeadMiddleware;
+use Zend\Expressive\Router\Middleware\ImplicitHeadMiddlewareFactory;
+use Zend\Expressive\Router\Middleware\ImplicitOptionsMiddleware;
+use Zend\Expressive\Router\Middleware\ImplicitOptionsMiddlewareFactory;
+use Zend\Expressive\Router\Middleware\MethodNotAllowedMiddleware;
+use Zend\Expressive\Router\Middleware\MethodNotAllowedMiddlewareFactory;
+use Zend\Expressive\Router\Middleware\RouteMiddleware;
+use Zend\Expressive\Router\Middleware\RouteMiddlewareFactory;
+use Zend\Expressive\Router\RouteCollector;
+use Zend\Expressive\Router\RouteCollectorFactory;
+use Zend\HttpHandlerRunner\Emitter\EmitterInterface;
+use Zend\HttpHandlerRunner\RequestHandlerRunner;
+use Zend\Stratigility\Middleware\ErrorHandler;
 use Zend\Stratigility\MiddlewarePipeInterface;
+use Zend\Expressive\Router\FastRouteRouterFactory;
+use Zend\Expressive\Router\FastRouteRouter;
+use Zend\Expressive\Helper\ServerUrlMiddleware;
+use Zend\Expressive\Helper\ServerUrlMiddlewareFactory;
+use Zend\Expressive\Helper\UrlHelper;
+use Zend\Expressive\Helper\UrlHelperFactory;
 use Closure;
 
 trait ManeroConfigTrait
@@ -22,45 +64,45 @@ trait ManeroConfigTrait
      *     @Alias({"name" = "Zend\Expressive\Router\RouterInterface"})
      * }})
      */
-    public function getZendExpressiveRouterFastRouteRouter() : \Zend\Expressive\Router\FastRouteRouter
+    public function getZendExpressiveRouterFastRouteRouter() : FastRouteRouter
     {
-        return (new \Zend\Expressive\Router\FastRouteRouterFactory())(BeanFactoryRegistry::getInstance());
+        return (new FastRouteRouterFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Helper\ServerUrlMiddleware"})
      * }})
      */
-    public function getZendExpressiveHelperServerUrlMiddleware() : \Zend\Expressive\Helper\ServerUrlMiddleware
+    public function getZendExpressiveHelperServerUrlMiddleware() : ServerUrlMiddleware
     {
-        return (new \Zend\Expressive\Helper\ServerUrlMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new ServerUrlMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Helper\UrlHelper"})
      * }})
      */
-    public function getZendExpressiveHelperUrlHelper() : \Zend\Expressive\Helper\UrlHelper
+    public function getZendExpressiveHelperUrlHelper() : UrlHelper
     {
-        return (new \Zend\Expressive\Helper\UrlHelperFactory())(BeanFactoryRegistry::getInstance());
+        return (new UrlHelperFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Helper\UrlHelperMiddleware"})
      * }})
      */
-    public function getZendExpressiveHelperUrlHelperMiddleware() : \Zend\Expressive\Helper\UrlHelperMiddleware
+    public function getZendExpressiveHelperUrlHelperMiddleware() : UrlHelperMiddleware
     {
-        return (new \Zend\Expressive\Helper\UrlHelperMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new UrlHelperMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Application"})
      * }})
      */
-    public function getZendExpressiveApplication() : \Zend\Expressive\Application
+    public function getZendExpressiveApplication() : Application
     {
-        return (new \Zend\Expressive\Container\ApplicationFactory())(BeanFactoryRegistry::getInstance());
+        return (new ApplicationFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -69,25 +111,25 @@ trait ManeroConfigTrait
      */
     public function getZendExpressiveApplicationPipeline() : MiddlewarePipeInterface
     {
-        return (new \Zend\Expressive\Container\ApplicationPipelineFactory())(BeanFactoryRegistry::getInstance());
+        return (new ApplicationPipelineFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\HttpHandlerRunner\Emitter\EmitterInterface"})
      * }})
      */
-    public function getZendHttpHandlerRunnerEmitterEmitterInterface() : \Zend\HttpHandlerRunner\Emitter\EmitterInterface
+    public function getZendHttpHandlerRunnerEmitterEmitterInterface() : EmitterInterface
     {
-        return (new \Zend\Expressive\Container\EmitterFactory())(BeanFactoryRegistry::getInstance());
+        return (new EmitterFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Stratigility\Middleware\ErrorHandler"})
      * }})
      */
-    public function getZendStratigilityMiddlewareErrorHandler() : \Zend\Stratigility\Middleware\ErrorHandler
+    public function getZendStratigilityMiddlewareErrorHandler() : ErrorHandler
     {
-        return (new \Zend\Expressive\Container\ErrorHandlerFactory())(BeanFactoryRegistry::getInstance());
+        return (new ErrorHandlerFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -96,36 +138,36 @@ trait ManeroConfigTrait
      *     @Alias({"name" = "Zend\Expressive\Middleware\NotFoundMiddleware"})
      * }})
      */
-    public function getZendExpressiveHandlerNotFoundHandler() : \Zend\Expressive\Handler\NotFoundHandler
+    public function getZendExpressiveHandlerNotFoundHandler() : NotFoundHandler
     {
-        return (new \Zend\Expressive\Container\NotFoundHandlerFactory())(BeanFactoryRegistry::getInstance());
+        return (new NotFoundHandlerFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\MiddlewareContainer"})
      * }})
      */
-    public function getZendExpressiveMiddlewareContainer() : \Zend\Expressive\MiddlewareContainer
+    public function getZendExpressiveMiddlewareContainer() : MiddlewareContainer
     {
-        return (new \Zend\Expressive\Container\MiddlewareContainerFactory())(BeanFactoryRegistry::getInstance());
+        return (new MiddlewareContainerFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\MiddlewareFactory"})
      * }})
      */
-    public function getZendExpressiveMiddlewareFactory() : \Zend\Expressive\MiddlewareFactory
+    public function getZendExpressiveMiddlewareFactory() : MiddlewareFactory
     {
-        return (new \Zend\Expressive\Container\MiddlewareFactoryFactory())(BeanFactoryRegistry::getInstance());
+        return (new MiddlewareFactoryFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\HttpHandlerRunner\RequestHandlerRunner"})
      * }})
      */
-    public function getZendHttpHandlerRunnerRequestHandlerRunner() : \Zend\HttpHandlerRunner\RequestHandlerRunner
+    public function getZendHttpHandlerRunnerRequestHandlerRunner() : RequestHandlerRunner
     {
-        return (new \Zend\Expressive\Container\RequestHandlerRunnerFactory())(BeanFactoryRegistry::getInstance());
+        return (new RequestHandlerRunnerFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -134,16 +176,16 @@ trait ManeroConfigTrait
      */
     public function getPsrHttpMessageResponseInterface() : Closure
     {
-        return (new \Zend\Expressive\Container\ResponseFactoryFactory())(BeanFactoryRegistry::getInstance());
+        return (new ResponseFactoryFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Response\ServerRequestErrorResponseGenerator"})
      * }})
      */
-    public function getZendExpressiveResponseServerRequestErrorResponseGenerator() : \Zend\Expressive\Response\ServerRequestErrorResponseGenerator
+    public function getZERServerRequestErrorResponseGenerator() : ServerRequestErrorResponseGenerator
     {
-        return (new \Zend\Expressive\Container\ServerRequestErrorResponseGeneratorFactory())(BeanFactoryRegistry::getInstance());
+        return (new ServerRequestErrorResponseGeneratorFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -152,7 +194,7 @@ trait ManeroConfigTrait
      */
     public function getPsrHttpMessageServerRequestInterface() : Closure
     {
-        return (new \Zend\Expressive\Container\ServerRequestFactoryFactory())(BeanFactoryRegistry::getInstance());
+        return (new ServerRequestFactoryFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -161,7 +203,7 @@ trait ManeroConfigTrait
      */
     public function getPsrHttpMessageStreamInterface() : Closure
     {
-        return (new \Zend\Expressive\Container\StreamFactoryFactory())(BeanFactoryRegistry::getInstance());
+        return (new StreamFactoryFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -169,9 +211,9 @@ trait ManeroConfigTrait
      *     @Alias({"name" = "Zend\Expressive\Middleware\DispatchMiddleware"})
      * }})
      */
-    public function getZendExpressiveRouterMiddlewareDispatchMiddleware() : \Zend\Expressive\Router\Middleware\DispatchMiddleware
+    public function getZendExpressiveRouterMiddlewareDispatchMiddleware() : DispatchMiddleware
     {
-        return (new \Zend\Expressive\Router\Middleware\DispatchMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new DispatchMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -179,9 +221,9 @@ trait ManeroConfigTrait
      *     @Alias({"name" = "Zend\Expressive\Middleware\ImplicitHeadMiddleware"})
      * }})
      */
-    public function getZendExpressiveRouterMiddlewareImplicitHeadMiddleware() : \Zend\Expressive\Router\Middleware\ImplicitHeadMiddleware
+    public function getZERMiddlewareImplicitHeadMiddleware() : ImplicitHeadMiddleware
     {
-        return (new \Zend\Expressive\Router\Middleware\ImplicitHeadMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new ImplicitHeadMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -189,18 +231,18 @@ trait ManeroConfigTrait
      *     @Alias({"name" = "Zend\Expressive\Middleware\ImplicitOptionsMiddleware"})
      * }})
      */
-    public function getZendExpressiveRouterMiddlewareImplicitOptionsMiddleware() : \Zend\Expressive\Router\Middleware\ImplicitOptionsMiddleware
+    public function getZERMiddlewareImplicitOptionsMiddleware() : ImplicitOptionsMiddleware
     {
-        return (new \Zend\Expressive\Router\Middleware\ImplicitOptionsMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new ImplicitOptionsMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Router\Middleware\MethodNotAllowedMiddleware"})
      * }})
      */
-    public function getZendExpressiveRouterMiddlewareMethodNotAllowedMiddleware() : \Zend\Expressive\Router\Middleware\MethodNotAllowedMiddleware
+    public function getZERMiddlewareMethodNotAllowedMiddleware() : MethodNotAllowedMiddleware
     {
-        return (new \Zend\Expressive\Router\Middleware\MethodNotAllowedMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new MethodNotAllowedMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -208,18 +250,18 @@ trait ManeroConfigTrait
      *     @Alias({"name" = "Zend\Expressive\Middleware\RouteMiddleware"})
      * }})
      */
-    public function getZendExpressiveRouterMiddlewareRouteMiddleware() : \Zend\Expressive\Router\Middleware\RouteMiddleware
+    public function getZERMiddlewareRouteMiddleware() : RouteMiddleware
     {
-        return (new \Zend\Expressive\Router\Middleware\RouteMiddlewareFactory())(BeanFactoryRegistry::getInstance());
+        return (new RouteMiddlewareFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
      *     @Alias({"name" = "Zend\Expressive\Router\RouteCollector"})
      * }})
      */
-    public function getZendExpressiveRouterRouteCollector() : \Zend\Expressive\Router\RouteCollector
+    public function getZendExpressiveRouterRouteCollector() : RouteCollector
     {
-        return (new \Zend\Expressive\Router\RouteCollectorFactory())(BeanFactoryRegistry::getInstance());
+        return (new RouteCollectorFactory())(BeanFactoryRegistry::getInstance());
     }
 
     /**
@@ -229,7 +271,7 @@ trait ManeroConfigTrait
      */
     public function getZendExpressiveWhoops() : Run
     {
-        return (new \Zend\Expressive\Container\WhoopsFactory())(BeanFactoryRegistry::getInstance());
+        return (new WhoopsFactory())(BeanFactoryRegistry::getInstance());
     }
     /**
      * @Bean({"aliases" = {
@@ -238,7 +280,7 @@ trait ManeroConfigTrait
      */
     public function getZendExpressiveWhoopsPageHandler() : PrettyPageHandler
     {
-        return (new \Zend\Expressive\Container\WhoopsPageHandlerFactory())(BeanFactoryRegistry::getInstance());
+        return (new WhoopsPageHandlerFactory())(BeanFactoryRegistry::getInstance());
     }
 
     /**

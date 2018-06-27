@@ -22,6 +22,9 @@ use GuzzleHttp\Psr7\Uri;
 
 class GithubServiceTest extends TestCase
 {
+    /**
+     * @covers \Org_Heigl\GetLatestAssets\Service\GithubService::__construct
+     */
     public function testInstantiation()
     {
         $client = M::mock(Client::class);
@@ -35,7 +38,10 @@ class GithubServiceTest extends TestCase
         self::assertAttributeSame($convertService, 'converterService', $service);
     }
 
-    /** @expectedException \Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess */
+    /**
+     * @expectedException \Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess
+     * @covers \Org_Heigl\GetLatestAssets\Service\GithubService::__invoke
+     */
     public function testServiceThrowsUpOnClientException()
     {
         $client = M::mock(Client::class);
@@ -49,6 +55,9 @@ class GithubServiceTest extends TestCase
         $service('tonymanero', 'manero', 'foo');
     }
 
+    /**
+     * @covers \Org_Heigl\GetLatestAssets\Service\GithubService::__invoke
+     */
     public function testService()
     {
         $response = M::mock(ResponseInterface::class);

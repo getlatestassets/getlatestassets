@@ -14,7 +14,9 @@ use Psr\Http\Message\StreamInterface;
 
 class ConvertGithubReleaseListServiceTest extends TestCase
 {
-
+    /**
+     * @covers \Org_Heigl\GetLatestAssets\Service\ConvertGithubReleaseListService::getReleaseList
+     */
     public function testGetReleaseList()
     {
         $body = M::mock(StreamInterface::class);

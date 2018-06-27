@@ -31,7 +31,7 @@ class VersionService
             ));
         }
 
-        usort($newList, function(Release $a, Release $b) {
+        usort($newList, function (Release $a, Release $b) {
             if (Comparator::greaterThan($a->getVersion(), $b->getVersion())) {
                 return -1;
             }
