@@ -35,7 +35,6 @@ jobs:
       env: DEPS=latest
       script:
         - composer cs-check
-    - stage: test
     - stage: coverage
       if: branch = master AND type = push
       php: 7.2
