@@ -32,6 +32,8 @@ jobs:
           coverage: xdebug
       - name: Download PHPUnit
         run: phive --no-progress install --trust-gpg-keys 4AA394086372C20A phpunit
+      - name: Install
+        run: composer install
       - name: test
         run: composer test
   analyze:
@@ -48,5 +50,7 @@ jobs:
           tools: phive
       - name: Download psalm
         run: phive --no-progress install --trust-gpg-keys 51C67305FFC2E5C0 phpstan
+      - name: Install
+        run: composer install
       - name: analyze
         run: ./tools/phpstan
