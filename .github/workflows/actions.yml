@@ -48,7 +48,7 @@ jobs:
           php-version: "8.3"
           tools: phive
       - name: Download psalm
-        run: phive --no-progress install --trust-gpg-keys 51C67305FFC2E5C0 phpstan
+        run: phive --no-progress install --trust-gpg-keys 51C67305FFC2E5C0,4AA394086372C20A phpstan phpunit
       - name: Install
         run: composer install
       - name: analyze
