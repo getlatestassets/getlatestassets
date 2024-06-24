@@ -27,6 +27,10 @@ final class DiProvider
 
         $this->container = $builder->build();
     }
+
+    /**
+     * @return App<ContainerInterface>
+     */
     public function getApp(): App
     {
         $app = Bridge::create($this->container);
@@ -34,6 +38,10 @@ final class DiProvider
 
         return $app;
     }
+
+    /**
+     * @return array<string, callable>
+     */
     public function getDefinitions(): array
     {
         return [

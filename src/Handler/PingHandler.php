@@ -16,7 +16,7 @@ class PingHandler implements RequestHandlerInterface
         return new Response(
             200,
             ['content-type' => 'application/json'],
-            json_encode(['ack' => time()])
+            (string) json_encode(['ack' => time()])
         );
     }
 }

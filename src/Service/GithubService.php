@@ -13,20 +13,11 @@ use Exception;
 
 class GithubService
 {
-    private $client;
-
-    private $versionService;
-
-    private $converterService;
-
     public function __construct(
-        Client $client,
-        VersionService $versionService,
-        ConvertGithubReleaseListService $converterService
+        private readonly Client $client,
+        private readonly VersionService $versionService,
+        private readonly ConvertGithubReleaseListService $converterService
     ) {
-        $this->client = $client;
-        $this->versionService = $versionService;
-        $this->converterService = $converterService;
     }
 
     /**

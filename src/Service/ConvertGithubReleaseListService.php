@@ -15,6 +15,14 @@ class ConvertGithubReleaseListService
     {
         $list = new ReleaseList();
 
+        /** @var array{
+         *      assets?: array{
+         *          name: string,
+         *          browser_download_url: string
+         *      }[],
+         *      tag_name: string
+         * }[] $json
+         */
         $json = json_decode($response->getBody()->getContents(), true);
         foreach ($json as $release) {
             if (empty($release['assets'])) {

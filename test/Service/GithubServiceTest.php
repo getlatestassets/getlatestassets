@@ -24,7 +24,7 @@ use GuzzleHttp\Psr7\Uri;
 #[CoversClass(GithubService::class)]
 class GithubServiceTest extends TestCase
 {
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
         $client = $this->getMockBuilder(Client::class)->getMock();
         $versionService = $this->getMockBuilder(VersionService::class)->getMock();
@@ -35,7 +35,7 @@ class GithubServiceTest extends TestCase
         self::assertTrue($service instanceof GithubService);
     }
 
-    public function testServiceThrowsUpOnClientException()
+    public function testServiceThrowsUpOnClientException(): void
     {
         $client = $this->getMockBuilder(Client::class)->getMock();
         $client->method('get')
@@ -50,7 +50,7 @@ class GithubServiceTest extends TestCase
         $service('tonymanero', 'manero', 'foo');
     }
 
-    public function testService()
+    public function testService(): void
     {
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
 

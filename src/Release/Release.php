@@ -9,9 +9,12 @@ use Org_Heigl\GetLatestAssets\Exception\AssetNotFound;
 
 class Release
 {
-    private $version;
+    private string $version;
 
-    private $assetUrls;
+    /**
+     * @var AssetUrl[]
+     */
+    private array $assetUrls;
 
     public function __construct(string $version, AssetUrl ...$assetUrls)
     {
@@ -24,6 +27,9 @@ class Release
         return $this->version;
     }
 
+    /**
+     * @return AssetUrl[]
+     */
     public function getAssetUrls() : array
     {
         return $this->assetUrls;

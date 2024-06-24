@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: heiglandreas
- * Date: 22.06.18
- * Time: 20:55
- */
 
 namespace Org_Heigl\GetLatestAssetsTest\Service;
 
@@ -20,9 +14,15 @@ use PHPUnit\Framework\TestCase;
 class VersionServiceTest extends TestCase
 {
 
+    /**
+     * @param string[] $list
+     */
     #[DataProvider('getLatestAssetForConstraintFromResultProvider')]
-    public function testGetLatestAssetForConstraintFromResult($list, $constraint, $result)
-    {
+    public function testGetLatestAssetForConstraintFromResult(
+        array $list,
+        string|null $constraint,
+        int|null $result
+    ): void {
         $array = [];
         $releaseList = new ReleaseList();
         foreach ($list as $key => $version) {
@@ -43,7 +43,10 @@ class VersionServiceTest extends TestCase
         self::assertSame($array[$result], $service->getLatestAssetForConstraintFromResult($releaseList, $constraint));
     }
 
-    public static function getLatestAssetForConstraintFromResultProvider()
+    /**
+     * @return array{array{array<string>, string|null, int|null}}
+     */
+    public static function getLatestAssetForConstraintFromResultProvider(): array
     {
         return [
             [['1.2.3'], '1.2.3', 0],
