@@ -6,7 +6,7 @@ jobs:
     continue-on-error: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,7 +23,7 @@ jobs:
     name: Test
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -41,15 +41,15 @@ jobs:
     continue-on-error: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
           tools: phive
-      - name: Download psalm
-        run: phive --no-progress install --trust-gpg-keys 51C67305FFC2E5C0,4AA394086372C20A phpstan phpunit
       - name: Install
         run: composer install
+      - name: Download phpstan
+        run: phive --no-progress install --trust-gpg-keys 51C67305FFC2E5C0,4AA394086372C20A phpstan phpunit
       - name: analyze
         run: ./tools/phpstan
