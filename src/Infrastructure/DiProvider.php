@@ -26,7 +26,6 @@ final class DiProvider
         $builder->addDefinitions($this->getDefinitions());
 
         $this->container = $builder->build();
-
     }
     public function getApp(): App
     {
@@ -38,8 +37,7 @@ final class DiProvider
     public function getDefinitions(): array
     {
         return [
-            Client::class => function (ContainerInterface $container): Client
-            {
+            Client::class => function (ContainerInterface $container): Client {
                 return new Client([
                     'base_uri' => 'https://api.github.com',
                     'headers' => [
