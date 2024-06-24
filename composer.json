@@ -14,15 +14,6 @@
         "sort-packages": true
     },
     "extra": {
-        "zf": {
-            "component-whitelist": [
-                "zendframework/zend-expressive",
-                "zendframework/zend-expressive-helpers",
-                "zendframework/zend-expressive-router",
-                "zendframework/zend-httphandlerrunner",
-                "zendframework/zend-expressive-fastroute"
-            ]
-        },
         "tools": {
             "phpcs": {
                 "url": "https://api.getlatestassets.com/github/squizlabs/PHP_CodeSniffer/phpcs.phar?version=^3.2",
@@ -40,23 +31,18 @@
         "rss": "https://github.com/getlatestassets/getlatestassets/releases.atom"
     },
     "require": {
-        "php": "^7.2",
-        "bitexpert/disco": "^0.10.0",
-        "composer/semver": "^1.4",
-        "filp/whoops": "^2.1.12",
-        "guzzlehttp/guzzle": "^6.3",
+        "php": "^8.3",
+        "composer/semver": "^3.4",
+        "guzzlehttp/guzzle": "^7.8",
+        "guzzlehttp/psr7": "^2",
         "org_heigl/trait-iterator": "^1.0",
+        "php-di/php-di": "^6.4",
+        "php-di/slim-bridge": "^3.4",
         "roave/security-advisories": "dev-master",
-        "zendframework/zend-component-installer": "^2.1.1",
-        "zendframework/zend-config-aggregator": "^1.0",
-        "zendframework/zend-diactoros": "^1.7.1",
-        "zendframework/zend-expressive": "^3.0.1",
-        "zendframework/zend-expressive-fastroute": "^3.0",
-        "zendframework/zend-expressive-helpers": "^5.0",
-        "zendframework/zend-servicemanager": "^3.3",
-        "zendframework/zend-stdlib": "^3.1"
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4.12"
     },
-    "require-dev": {
+    "_require-dev": {
         "mockery/mockery": "^1.1",
         "phpunit/phpunit": "^7.0.1",
         "squizlabs/php_codesniffer": "^2.9.1",

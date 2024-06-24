@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Org_Heigl\GetLatestAssets\Handler;
 
+use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\JsonResponse;
 
 class PingHandler implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        return new JsonResponse(['ack' => time()]);
+        return new Response(
+            200,
+            ['content-type' => 'application/json'],
+            json_encode(['ack' => time()])
+        );
     }
 }
