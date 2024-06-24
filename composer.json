@@ -42,9 +42,6 @@
         "slim/psr7": "^1.6",
         "slim/slim": "^4.12"
     },
-    "replace": {
-        "squizlabs/php_codesniffer": "*"
-    },
     "autoload": {
         "psr-4": {
             "Org_Heigl\\GetLatestAssets\\": "src/"
