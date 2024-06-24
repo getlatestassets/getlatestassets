@@ -19,7 +19,6 @@ jobs:
       - name: check
         run: ./tools/phpcs
   test:
-    needs: [check]
     runs-on: ubuntu-latest
     name: Test
     steps:
@@ -29,6 +28,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
+          tools: phive
           coverage: xdebug
       - name: Download PHPUnit
         run: phive --no-progress install --trust-gpg-keys 4AA394086372C20A phpunit
@@ -37,7 +37,6 @@ jobs:
       - name: test
         run: composer test
   analyze:
-    needs: test
     runs-on: ubuntu-latest
     continue-on-error: false
     steps:
