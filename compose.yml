@@ -14,3 +14,4 @@ services:
     - 9000
     volumes:
     - ./:/usr/share/nginx/html/
+    working_dir: /usr/share/nginx/html

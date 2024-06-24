@@ -15,7 +15,7 @@ use Psr\Http\Message\StreamInterface;
 #[CoversClass(ConvertGithubReleaseListService::class)]
 class ConvertGithubReleaseListServiceTest extends TestCase
 {
-    public function testGetReleaseList()
+    public function testGetReleaseList(): void
     {
         $body = $this->getMockBuilder(StreamInterface::class)->getMock();
         $body->method('getContents')->willReturn(file_get_contents(__DIR__ . '/_assets/githubReleaseList.json'));

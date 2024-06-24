@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Org_Heigl\GetLatestAssets;
 
-class AssetUrl
+final class AssetUrl
 {
-    private $name;
-
-    private $url;
-
-    public function __construct(string $name, string $url)
-    {
-        $this->name = $name;
-        $this->url = $url;
+    public function __construct(
+        private readonly string $name,
+        private readonly string $url
+    ) {
     }
 
     public function getAssetName() : string

@@ -9,26 +9,27 @@ use Org_Heigl\GetLatestAssets\Service\GithubService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use RuntimeException;
 use Slim\Routing\RouteContext;
 use Zend\Diactoros\Response\RedirectResponse;
 
 class GithubHandler implements RequestHandlerInterface
 {
-    private $service;
-
-    public function __construct(GithubService $service)
-    {
-        $this->service = $service;
+    public function __construct(
+        private readonly GithubService $service
+    ) {
     }
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
-
-        $user    = urldecode($route->getArgument('user'));
-        $project = urldecode($route->getArgument('project'));
-        $file    = urldecode($route->getArgument('name'));
+        if ($route === null) {
+            throw new RuntimeException('Route not found');
+        }
+        $user    = urldecode((string ) $route->getArgument('user'));
+        $project = urldecode((string) $route->getArgument('project'));
+        $file    = urldecode((string) $route->getArgument('name'));
         $query   = $request->getQueryParams();
         $constraint = null;
         if (isset($query['version'])) {

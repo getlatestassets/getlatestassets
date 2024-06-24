@@ -7,11 +7,17 @@ namespace Org_Heigl\GetLatestAssets\Release;
 use Iterator;
 use Org_Heigl\IteratorTrait\IteratorTrait;
 
+/**
+ * @implements Iterator<int, Release>
+ */
 class ReleaseList implements Iterator
 {
     use IteratorTrait;
 
-    private $releases;
+    /**
+     * @var Release[]
+     */
+    private array $releases;
 
     public function addRelease(Release $release) : void
     {
@@ -21,9 +27,9 @@ class ReleaseList implements Iterator
     /**
      * Get the array the iterator shall iterate over.
      *
-     * @return array
+     * @return Release[]
      */
-    protected function & getIterableElement()
+    protected function & getIterableElement(): array
     {
         return $this->releases;
     }
