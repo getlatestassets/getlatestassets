@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.2/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true">
-    <testsuites>
-        <testsuite name="GetlatestAssets\\Tests">
-            <directory>./test</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-html" target="docs/coverage"
-             lowUpperBound="35" highLowerBound="70"/>
-    </logging>
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+>
+  <coverage>
+    <report>
+      <html outputDirectory="docs/coverage" lowUpperBound="35" highLowerBound="70"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="GetlatestAssets\\Tests">
+      <directory>./test</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
 </phpunit>

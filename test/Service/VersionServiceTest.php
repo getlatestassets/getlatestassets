@@ -12,23 +12,22 @@ use Org_Heigl\GetLatestAssets\Exception\NoAssetMatchingConstraintFound;
 use Org_Heigl\GetLatestAssets\Release\Release;
 use Org_Heigl\GetLatestAssets\Release\ReleaseList;
 use Org_Heigl\GetLatestAssets\Service\VersionService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Mockery as M;
 
+#[CoversClass(VersionService::class)]
 class VersionServiceTest extends TestCase
 {
 
-    /**
-     * @dataProvider getLatestAssetForConstraintFromResultProvider
-     * @covers \Org_Heigl\GetLatestAssets\Service\VersionService::getLatestAssetForConstraintFromResult
-     */
+    #[DataProvider('getLatestAssetForConstraintFromResultProvider')]
     public function testGetLatestAssetForConstraintFromResult($list, $constraint, $result)
     {
         $array = [];
         $releaseList = new ReleaseList();
         foreach ($list as $key => $version) {
-            $array[$key] = M::mock(Release::class);
-            $array[$key]->shouldReceive('getVersion')->andReturn($version);
+            $array[$key] = $this->getMockBuilder(Release::class)->disableOriginalConstructor()->getMock();
+            $array[$key]->method('getVersion')->willReturn($version);
             $releaseList->addRelease($array[$key]);
         }
 
@@ -44,7 +43,7 @@ class VersionServiceTest extends TestCase
         self::assertSame($array[$result], $service->getLatestAssetForConstraintFromResult($releaseList, $constraint));
     }
 
-    public function getLatestAssetForConstraintFromResultProvider()
+    public static function getLatestAssetForConstraintFromResultProvider()
     {
         return [
             [['1.2.3'], '1.2.3', 0],

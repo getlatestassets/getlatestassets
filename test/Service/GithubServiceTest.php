@@ -10,76 +10,68 @@ namespace Org_Heigl\GetLatestAssetsTest\Service;
 
 use GuzzleHttp\Client;
 use Org_Heigl\GetLatestAssets\AssetUrl;
+use Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess;
 use Org_Heigl\GetLatestAssets\Release\Release;
 use Org_Heigl\GetLatestAssets\Release\ReleaseList;
 use Org_Heigl\GetLatestAssets\Service\ConvertGithubReleaseListService;
 use Org_Heigl\GetLatestAssets\Service\GithubService;
 use Org_Heigl\GetLatestAssets\Service\VersionService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Mockery as M;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Uri;
 
+#[CoversClass(GithubService::class)]
 class GithubServiceTest extends TestCase
 {
-    /**
-     * @covers \Org_Heigl\GetLatestAssets\Service\GithubService::__construct
-     */
     public function testInstantiation()
     {
-        $client = M::mock(Client::class);
-        $versionService = M::mock(VersionService::class);
-        $convertService = M::mock(ConvertGithubReleaseListService::class);
+        $client = $this->getMockBuilder(Client::class)->getMock();
+        $versionService = $this->getMockBuilder(VersionService::class)->getMock();
+        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
 
         $service = new GithubService($client, $versionService, $convertService);
 
-        self::assertAttributeSame($client, 'client', $service);
-        self::assertAttributeSame($versionService, 'versionService', $service);
-        self::assertAttributeSame($convertService, 'converterService', $service);
+        self::assertTrue($service instanceof GithubService);
     }
 
-    /**
-     * @expectedException \Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess
-     * @covers \Org_Heigl\GetLatestAssets\Service\GithubService::__invoke
-     */
     public function testServiceThrowsUpOnClientException()
     {
-        $client = M::mock(Client::class);
-        $client->shouldReceive('get')
+        $client = $this->getMockBuilder(Client::class)->getMock();
+        $client->method('get')
                ->with('repos/tonymanero/manero/releases')
-               ->andThrow( new \Exception());
-        $versionService = M::mock(VersionService::class);
-        $convertService = M::mock(ConvertGithubReleaseListService::class);
+               ->willThrowException( new \Exception());
+        $versionService = $this->getMockBuilder(VersionService::class)->getMock();
+        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
 
         $service = new GithubService($client, $versionService, $convertService);
+
+        self::expectException(TroubleWithGithubApiAccess::class);
         $service('tonymanero', 'manero', 'foo');
     }
 
-    /**
-     * @covers \Org_Heigl\GetLatestAssets\Service\GithubService::__invoke
-     */
     public function testService()
     {
-        $response = M::mock(ResponseInterface::class);
+        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
 
-        $client = M::mock(Client::class);
-        $client->shouldReceive('get')
+        $client = $this->getMockBuilder(Client::class)->getMock();
+        $client->method('get')
                ->with('/repos/tonymanero/manero/releases')
-               ->andReturn($response);
+               ->willReturn($response);
 
-        $releaseList = M::mock(ReleaseList::class);
+        $releaseList = $this->getMockBuilder(ReleaseList::class)->getMock();
 
-        $convertService = M::mock(ConvertGithubReleaseListService::class);
-        $convertService->shouldReceive('getReleaseList')
+        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
+        $convertService->method('getReleaseList')
                        ->with($response)
-                       ->andReturn($releaseList);
+                       ->willReturn($releaseList);
 
         $release = new Release('1.0.0', new AssetUrl('name', 'http://example.com/foo?bar=baz#foob'));
 
-        $versionService = M::mock(VersionService::class);
-        $versionService->shouldReceive('getLatestAssetForConstraintFromResult')
+        $versionService = $this->getMockBuilder(VersionService::class)->getMock();
+        $versionService->method('getLatestAssetForConstraintFromResult')
                        ->with($releaseList, null)
-                       ->andReturn($release);
+                       ->willReturn($release);
 
         $service = new GithubService($client, $versionService, $convertService);
         $result = $service('tonymanero', 'manero', 'name');
