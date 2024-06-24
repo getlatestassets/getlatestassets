@@ -42,14 +42,6 @@
         "slim/psr7": "^1.6",
         "slim/slim": "^4.12"
     },
-    "_require-dev": {
-        "mockery/mockery": "^1.1",
-        "phpunit/phpunit": "^7.0.1",
-        "squizlabs/php_codesniffer": "^2.9.1",
-        "tm/tooly-composer-script": "^1.2",
-        "zendframework/zend-expressive-tooling": "^1.0",
-        "zfcampus/zf-development-mode": "^3.1"
-    },
     "autoload": {
         "psr-4": {
             "Org_Heigl\\GetLatestAssets\\": "src/"
@@ -61,20 +53,16 @@
         }
     },
     "scripts": {
-        "development-disable": "zf-development-mode disable",
-        "development-enable": "zf-development-mode enable",
-        "development-status": "zf-development-mode status",
-        "check": [
+       "check": [
             "@cs-check",
             "@test",
             "@analyze"
         ],
-        "analyze": "phpstan analyze -l max -c ./phpstan.installer.neon ./src ./config",
-        "clear-config-cache": "php bin/clear-config-cache.php",
-        "cs-check": "./vendor/bin/phpcs",
-        "cs-fix": "./vendor/bin/phpcbf",
+        "analyze": "./tools/phpstan analyze -l max -c ./phpstan.installer.neon ./src ./config",
+        "cs-check": "./tools/phpcs",
+        "cs-fix": "./tools/phpcbf",
         "serve": "php -S 0.0.0.0:8080 -t public/",
-        "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+        "test": "./tools/phpunit --colors=always",
+        "test-coverage": "./tools/phpunit --colors=always --coverage-clover clover.xml"
     }
 }

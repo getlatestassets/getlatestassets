@@ -1,8 +1,10 @@
 .idea
 composer.phar
-
 clover.xml
 coveralls-upload.json
 phpunit.xml
 vendor/
+tools
+.phpunit*
+docs
 
