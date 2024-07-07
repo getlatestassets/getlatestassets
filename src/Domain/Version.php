@@ -7,19 +7,19 @@ namespace Org_Heigl\GetLatestAssets\Domain;
 final class Version
 {
     private const PATTERN = [
-        '(?P<major>[\d+])',
+        '(?P<major>[\d]+)',
         '\.',
-        '(?P<minor>[\d+])',
+        '(?P<minor>[\d]+)',
         '\.',
-        '(?P<patch>[\d+])',
+        '(?P<patch>[\d]+)',
         '(-(?P<preRelease>[a-zA-Z0-9-]+))?',
         '(\+(?P<build>[a-zA-Z0-9-]+))?',
     ];
 
     private const GENERIC_PATTERN = [
-        '(?P<major>[\d+])',
-        '[^0.9]+',
-        '(?P<minor>[\d+])',
+        '(?P<major>[\d]+)',
+        '[^0-9]+',
+        '(?P<minor>[\d]+)',
     ];
 
     private int $major = 0;
