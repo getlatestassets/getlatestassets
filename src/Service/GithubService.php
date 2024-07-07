@@ -6,6 +6,7 @@ namespace Org_Heigl\GetLatestAssets\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
+use Org_Heigl\GetLatestAssets\Domain\Version;
 use Org_Heigl\GetLatestAssets\Exception\AssetNotFound;
 use Org_Heigl\GetLatestAssets\Exception\NoAssetsFound;
 use Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess;
@@ -51,6 +52,9 @@ class GithubService
             $constraint
         );
 
-        return new Uri($asset->getAssetUrl($file)->getAssetUrl());
+        $version = new Version($asset->getVersion());
+        $rewriter = new FilenameRewriteService($version);
+
+        return new Uri($asset->getAssetUrl($rewriter($file))->getAssetUrl());
     }
 }
