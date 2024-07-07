@@ -46,12 +46,14 @@ class VersionTest extends TestCase
     {
         return [
             ['1.2.3', 1, 2, 3, '', '', true],
+            ['10.20.30', 10, 20, 30, '', '', true],
             ['1.2.3-pre-Release', 1, 2, 3, 'pre-Release', '', true],
             ['1.2.3+build', 1, 2, 3, '', 'build', true],
             ['1.2.3+build-release', 1, 2, 3, '', 'build-release', true],
             ['1.2.3-cool-release+my-build', 1, 2, 3, 'cool-release', 'my-build', true],
             ['bookworm', 0, 0, 0, '', '', false],
-            ['1.2', 1, 2, 0, '', '', false]
+            ['1.2', 1, 2, 0, '', '', false],
+            ['release-74-1', 74, 1, 0, '', '', false],
         ];
     }
 }

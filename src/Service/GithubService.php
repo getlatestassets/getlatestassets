@@ -55,6 +55,6 @@ class GithubService
         $version = new Version($asset->getVersion());
         $rewriter = new FilenameRewriteService($version);
 
-        return new Uri($asset->getAssetUrl($rewriter($file))->getAssetUrl());
+        return new Uri($asset->getAssetUrl(($rewriter)($file))->getAssetUrl());
     }
 }
