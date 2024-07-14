@@ -11,6 +11,7 @@ namespace Org_Heigl\GetLatestAssetsTest\Service;
 use GuzzleHttp\Client;
 use Org_Heigl\GetLatestAssets\AssetUrl;
 use Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess;
+use Org_Heigl\GetLatestAssets\Infrastructure\Cache\CacheItem;
 use Org_Heigl\GetLatestAssets\Release\Release;
 use Org_Heigl\GetLatestAssets\Release\ReleaseList;
 use Org_Heigl\GetLatestAssets\Service\ConvertGithubReleaseListService;
@@ -18,6 +19,7 @@ use Org_Heigl\GetLatestAssets\Service\GithubService;
 use Org_Heigl\GetLatestAssets\Service\VersionService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Uri;
 
@@ -29,8 +31,9 @@ class GithubServiceTest extends TestCase
         $client = $this->getMockBuilder(Client::class)->getMock();
         $versionService = $this->getMockBuilder(VersionService::class)->getMock();
         $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
+        $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
 
-        $service = new GithubService($client, $versionService, $convertService);
+        $service = new GithubService($client, $versionService, $convertService, $caching);
 
         self::assertTrue($service instanceof GithubService);
     }
@@ -43,8 +46,9 @@ class GithubServiceTest extends TestCase
                ->willThrowException( new \Exception());
         $versionService = $this->getMockBuilder(VersionService::class)->getMock();
         $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
+        $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
 
-        $service = new GithubService($client, $versionService, $convertService);
+        $service = new GithubService($client, $versionService, $convertService, $caching);
 
         self::expectException(TroubleWithGithubApiAccess::class);
         $service('tonymanero', 'manero', 'foo');
@@ -59,7 +63,7 @@ class GithubServiceTest extends TestCase
                ->with('/repos/tonymanero/manero/releases')
                ->willReturn($response);
 
-        $releaseList = $this->getMockBuilder(ReleaseList::class)->getMock();
+        $releaseList = new ReleaseList();
 
         $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
         $convertService->method('getReleaseList')
@@ -67,13 +71,19 @@ class GithubServiceTest extends TestCase
                        ->willReturn($releaseList);
 
         $release = new Release('1.0.0', new AssetUrl('name', 'http://example.com/foo?bar=baz#foob'));
+        $releaseList->addRelease($release);
 
         $versionService = $this->getMockBuilder(VersionService::class)->getMock();
         $versionService->method('getLatestAssetForConstraintFromResult')
                        ->with($releaseList, null)
                        ->willReturn($release);
 
-        $service = new GithubService($client, $versionService, $convertService);
+        $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
+        $item = new CacheItem('whatever', '', new \DateTimeImmutable('-1 hour'));
+
+        $caching->method('getItem')->willReturn($item);
+
+        $service = new GithubService($client, $versionService, $convertService, $caching);
         $result = $service('tonymanero', 'manero', 'name');
 
         self::assertInstanceOf(Uri::class, $result);

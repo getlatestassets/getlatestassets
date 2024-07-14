@@ -17,7 +17,7 @@ class ReleaseList implements Iterator
     /**
      * @var Release[]
      */
-    private array $releases;
+    private array $releases = [];
 
     public function addRelease(Release $release) : void
     {
