@@ -57,6 +57,7 @@ class GithubServiceTest extends TestCase
     public function testService(): void
     {
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
+        $response->method('getHeader')->willReturn(['<url>; rel="alternate"; hreflang="en"']);
 
         $client = $this->getMockBuilder(Client::class)->getMock();
         $client->method('get')
@@ -65,17 +66,19 @@ class GithubServiceTest extends TestCase
 
         $releaseList = new ReleaseList();
 
-        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
-        $convertService->method('getReleaseList')
-                       ->with($response)
-                       ->willReturn($releaseList);
-
+        $newReleaseList = new ReleaseList();
         $release = new Release('1.0.0', new AssetUrl('name', 'http://example.com/foo?bar=baz#foob'));
-        $releaseList->addRelease($release);
+        $newReleaseList->addRelease($release);
+
+        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
+        $convertService->method('addToReleaseList')
+                       ->with($releaseList, $response)
+                       ->willReturn($newReleaseList);
+
 
         $versionService = $this->getMockBuilder(VersionService::class)->getMock();
         $versionService->method('getLatestAssetForConstraintFromResult')
-                       ->with($releaseList, null)
+                       ->with($newReleaseList, null)
                        ->willReturn($release);
 
         $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();

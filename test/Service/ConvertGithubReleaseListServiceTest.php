@@ -24,7 +24,8 @@ class ConvertGithubReleaseListServiceTest extends TestCase
         $interface->method('getBody')->willReturn($body);
         $service = new ConvertGithubReleaseListService();
 
-        $releases = $service->getReleaseList($interface);
+        $releases = new ReleaseList();
+        $releases = $service->addToReleaseList($releases, $interface);
 
         self::assertInstanceOf(ReleaseList::class, $releases);
 

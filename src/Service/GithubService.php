@@ -10,6 +10,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use Org_Heigl\GetLatestAssets\Domain\Version;
 use Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess;
+use Org_Heigl\GetLatestAssets\Links;
+use Org_Heigl\GetLatestAssets\Release\ReleaseList;
 use Org_Heigl\GetLatestAssets\ReleaseListHydrator;
 use Org_Heigl\GetLatestAssets\ReleaseListSerializer;
 use Psr\Cache\CacheItemPoolInterface;
@@ -36,22 +38,29 @@ class GithubService
     ) : Uri {
         $cache = $this->cacheItemPool->getItem('github_' . $user . '_' . $project);
         if (! $cache->isHit()) {
-            try {
-                $result = $this->client->get(sprintf(
-                    '/repos/%1$s/%2$s/releases',
-                    $user,
-                    $project
-                ));
-            } catch (Exception $e) {
-                throw new TroubleWithGithubApiAccess(
-                    'Something went south while accessing the Github-API',
-                    400,
-                    $e
-                );
-            }
+            $releases = new ReleaseList();
+            $nextUrl = sprintf(
+                '/repos/%1$s/%2$s/releases',
+                $user,
+                $project
+            );
+            do {
+                try {
+                    $result = $this->client->get($nextUrl);
+                } catch (Exception $e) {
+                    throw new TroubleWithGithubApiAccess(
+                        'Something went south while accessing the Github-API',
+                        400,
+                        $e
+                    );
+                }
 
-            $result = $this->converterService->getReleaseList($result);
-            $cache->set((new ReleaseListSerializer())->serialize($result));
+                $releases = $this->converterService->addToReleaseList($releases, $result);
+
+                $link = Links::fromHeader($result->getHeader('link')[0]);
+                $nextUrl = $link->getLink('next')?->url;
+            } while ($nextUrl !== null);
+            $cache->set((new ReleaseListSerializer())->serialize($releases));
             $cache->expiresAfter(new DateInterval('P1D'));
             $this->cacheItemPool->save($cache);
         }
