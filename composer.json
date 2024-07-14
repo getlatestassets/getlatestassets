@@ -40,7 +40,8 @@
         "php-di/slim-bridge": "^3.4",
         "roave/security-advisories": "dev-master",
         "slim/psr7": "^1.6",
-        "slim/slim": "^4.12"
+        "slim/slim": "^4.12",
+        "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
         "psr-4": {

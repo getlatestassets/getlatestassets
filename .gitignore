@@ -7,4 +7,5 @@ vendor/
 tools
 .phpunit*
 docs
+.env
 

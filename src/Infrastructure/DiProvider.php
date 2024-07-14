@@ -8,7 +8,6 @@ use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
-use Org_Heigl\GetLatestAssets\Handler\GithubHandler;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 
@@ -23,6 +22,7 @@ final class DiProvider
             $builder->enableCompilation(__DIR__ . '/../../data/cache/di');
             $builder->writeProxiesToFile(true, __DIR__ . '/../../data/cache/proxies');
         }
+
         $builder->addDefinitions($this->getDefinitions());
 
         $this->container = $builder->build();
@@ -50,6 +50,7 @@ final class DiProvider
                     'base_uri' => 'https://api.github.com',
                     'headers' => [
                         'Accept' => 'application/vnd.github.v3+json',
+                        'Authorization' => $_ENV['GITHUB_API_KEY']??'',
                     ]
                 ]);
             }
