@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace Org_Heigl\GetLatestAssets\Service;
 
+use DateInterval;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use Org_Heigl\GetLatestAssets\Domain\Version;
-use Org_Heigl\GetLatestAssets\Exception\AssetNotFound;
-use Org_Heigl\GetLatestAssets\Exception\NoAssetsFound;
 use Org_Heigl\GetLatestAssets\Exception\TroubleWithGithubApiAccess;
-use Exception;
+use Org_Heigl\GetLatestAssets\ReleaseListHydrator;
+use Org_Heigl\GetLatestAssets\ReleaseListSerializer;
+use Psr\Cache\CacheItemPoolInterface;
 
 class GithubService
 {
     public function __construct(
         private readonly Client $client,
         private readonly VersionService $versionService,
-        private readonly ConvertGithubReleaseListService $converterService
+        private readonly ConvertGithubReleaseListService $converterService,
+        private readonly CacheItemPoolInterface $cacheItemPool,
     ) {
     }
 
@@ -31,21 +34,39 @@ class GithubService
         string $file,
         string $constraint = null
     ) : Uri {
-        try {
-            $result = $this->client->get(sprintf(
-                '/repos/%1$s/%2$s/releases',
-                $user,
-                $project
-            ));
-        } catch (Exception $e) {
-            throw new TroubleWithGithubApiAccess(
-                'Something went south while accessing the Github-API',
-                400,
-                $e
-            );
+        $cache = $this->cacheItemPool->getItem('github_' . $user . '_' . $project);
+        if (! $cache->isHit()) {
+            try {
+                $result = $this->client->get(sprintf(
+                    '/repos/%1$s/%2$s/releases',
+                    $user,
+                    $project
+                ));
+            } catch (Exception $e) {
+                throw new TroubleWithGithubApiAccess(
+                    'Something went south while accessing the Github-API',
+                    400,
+                    $e
+                );
+            }
+
+            $result = $this->converterService->getReleaseList($result);
+            $cache->set((new ReleaseListSerializer())->serialize($result));
+            $cache->expiresAfter(new DateInterval('P1D'));
+            $this->cacheItemPool->save($cache);
         }
 
-        $result = $this->converterService->getReleaseList($result);
+        /**
+         * @var array{
+         *     version: string,
+         *     urls: array{
+         *         name: string,
+         *         url: string
+         *     }[]
+         * }[] $c
+         */
+        $c = $cache->get();
+        $result = (new ReleaseListHydrator())->fromArray($c);
 
         $asset = $this->versionService->getLatestAssetForConstraintFromResult(
             $result,

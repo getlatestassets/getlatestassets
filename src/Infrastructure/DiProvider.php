@@ -8,6 +8,8 @@ use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
+use Org_Heigl\GetLatestAssets\Infrastructure\Cache\FileCacheItemPool;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 
@@ -53,6 +55,9 @@ final class DiProvider
                         'Authorization' => $_ENV['GITHUB_API_KEY']??'',
                     ]
                 ]);
+            },
+            CacheItemPoolInterface::class => function (ContainerInterface $container): CacheItemPoolInterface {
+                return new FileCacheItemPool($_ENV['CACHE_BASE_DIR']);
             }
         ];
     }
