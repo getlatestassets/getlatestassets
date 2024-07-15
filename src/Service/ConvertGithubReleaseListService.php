@@ -11,10 +11,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class ConvertGithubReleaseListService
 {
-    public function getReleaseList(ResponseInterface $response) : ReleaseList
+    public function addToReleaseList(ReleaseList $list, ResponseInterface $response) : ReleaseList
     {
-        $list = new ReleaseList();
-
         /** @var array{
          *      assets?: array{
          *          name: string,

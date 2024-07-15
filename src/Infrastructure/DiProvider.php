@@ -52,7 +52,7 @@ final class DiProvider
                     'base_uri' => 'https://api.github.com',
                     'headers' => [
                         'Accept' => 'application/vnd.github.v3+json',
-                        'Authorization' => $_ENV['GITHUB_API_KEY']??'',
+                        'Authorization' => "Bearer " . ($_ENV['GITHUB_API_KEY']??''),
                     ]
                 ]);
             },
