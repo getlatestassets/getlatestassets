@@ -38,6 +38,12 @@ final class DiProvider
         $app = Bridge::create($this->container);
         $this->container->set(App::class, $app);
 
+        $app->addBodyParsingMiddleware();
+
+        $app->addRoutingMiddleware();
+
+        $app->addErrorMiddleware(true, true, true);
+
         return $app;
     }
 
