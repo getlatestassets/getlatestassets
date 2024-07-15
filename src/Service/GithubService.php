@@ -57,8 +57,12 @@ class GithubService
 
                 $releases = $this->converterService->addToReleaseList($releases, $result);
 
-                $link = Links::fromHeader($result->getHeader('link')[0]);
-                $nextUrl = $link->getLink('next')?->url;
+                $header = $result->getHeader('link');
+                $nextUrl = null;
+                if ($header !== []) {
+                    $link = Links::fromHeader($result->getHeader('link')[0]);
+                    $nextUrl = $link->getLink('next')?->url;
+                }
             } while ($nextUrl !== null);
             $cache->set((new ReleaseListSerializer())->serialize($releases));
             $cache->expiresAfter(new DateInterval('P1D'));
