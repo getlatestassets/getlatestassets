@@ -32,7 +32,7 @@ final class FileCacheItemPool implements CacheItemPoolInterface
          */
         $data = json_decode($item, true);
 
-        return new CacheItem($key, $data['data'], new DateTimeImmutable($data['expires']));
+        return new CacheItem($key, $data['data'], new DateTimeImmutable($data['expires'] ?? '-1 hour'));
     }
 
     /**
