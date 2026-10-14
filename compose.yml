@@ -9,7 +9,7 @@ services:
     - php
 
   php:
-    image: php:8.3-fpm
+    image: registry.gitlab.com/stella-maris/php-containers/php8.5:latest
     expose:
     - 9000
     volumes:

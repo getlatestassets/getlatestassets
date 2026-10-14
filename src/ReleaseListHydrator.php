@@ -21,7 +21,7 @@ final class ReleaseListHydrator
      */
     public function fromArray(array $list): ReleaseList
     {
-		$tagNormalizer = new TagNormalizer();
+        $tagNormalizer = new TagNormalizer();
         $releaseList = new ReleaseList();
         foreach ($list as $release) {
             $urls = [];
@@ -29,10 +29,10 @@ final class ReleaseListHydrator
                 $urls[] = new AssetUrl($assetUrl['name'], $assetUrl['url']);
             }
             $releaseList->addRelease(new Release(
-				$release['version'],
-				$tagNormalizer->normalize($release['version']),
-				...$urls
-			));
+                $release['version'],
+                $tagNormalizer->normalize($release['version']),
+                ...$urls
+            ));
         }
 
         return $releaseList;

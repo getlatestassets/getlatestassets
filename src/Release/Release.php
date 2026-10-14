@@ -11,7 +11,7 @@ class Release
 {
     private string $version;
 
-	private string $normalizedVersion;
+    private string $normalizedVersion;
 
     /**
      * @var AssetUrl[]
@@ -62,8 +62,8 @@ class Release
         ));
     }
 
-	public function getNormalizedVersion() : string
-	{
-		return $this->normalizedVersion;
-	}
+    public function getNormalizedVersion() : string
+    {
+        return $this->normalizedVersion;
+    }
 }
