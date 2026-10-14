@@ -1,55 +1,82 @@
 name: Build
 on: [push, pull_request]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
+    name: Coding style
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout
     continue-on-error: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: "8.5"
-          tools: phive
       - name: Download codesniffer
-        run: phive --no-progress install --trust-gpg-keys A978220305CD5C32 phpcs
+        run: |
+          mkdir -p tools
+          cd tools
+          composer require --dev squizlabs/php_codesniffer
       - name: Install
         run: composer install
       - name: check
-        run: ./tools/phpcs
+        run: ./tools/vendor/bin/phpcs
   test:
     runs-on: ubuntu-latest
     name: Test
+    permissions:
+      contents: read # checkout
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: 8.5
-          tools: phive
           coverage: xdebug
       - name: Download PHPUnit
-        run: phive --no-progress install --trust-gpg-keys 4AA394086372C20A phpunit
+        run: |
+          mkdir -p tools
+          cd tools
+          composer require --dev phpunit/phpunit
       - name: Install
         run: composer install
       - name: test
-        run: composer test
+        run: ./tools/vendor/bin/phpunit --colors=always
   analyze:
+    name: Static analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout
     continue-on-error: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: "8.5"
-          tools: phive
       - name: Install
         run: composer install
       - name: Download phpstan
-        run: phive --no-progress install --trust-gpg-keys 51C67305FFC2E5C0,4AA394086372C20A phpstan phpunit
+        run: |
+          mkdir -p tools
+          cd tools
+          composer require --dev phpstan/phpstan phpunit/phpunit
       - name: analyze
-        run: ./tools/phpstan
+        run: ./tools/vendor/bin/phpstan analyze -c phpstan.neon

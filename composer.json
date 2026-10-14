@@ -60,7 +60,7 @@
             "@test",
             "@analyze"
         ],
-        "analyze": "./tools/phpstan analyze -l max -c ./phpstan.installer.neon ./src ./config",
+        "analyze": "./tools/phpstan analyze -c ./phpstan.neon",
         "cs-check": "./tools/phpcs",
         "cs-fix": "./tools/phpcbf",
         "serve": "php -S 0.0.0.0:8080 -t public/",
