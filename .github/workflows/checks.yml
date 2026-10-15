@@ -1,16 +1,29 @@
 name: "HCL AppScan CodeSweep"
 on:
   pull_request:
-    types: [opened,synchronize]
+    types: [opened, synchronize]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   scan:
+    name: AppScan CodeSweep
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout
+      checks: write # CodeSweep reports findings as check runs
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: '0'
+          # CodeSweep needs the full history to find the changed files
+          fetch-depth: 0
+          persist-credentials: false
       - name: Run AppScan CodeSweep
-        uses: HCL-TECH-SOFTWARE/appscan-codesweep-action@v2
-    env:
-      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        uses: HCL-TECH-SOFTWARE/appscan-codesweep-action@c9d5958469145a0aaf3ac41eaa0190e7757e4eba # v2.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
