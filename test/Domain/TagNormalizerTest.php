@@ -15,7 +15,7 @@ class TagNormalizerTest extends TestCase
     #[DataProvider('normalizeProvider')]
     public function testNormalize(string $tag, ?string $expected): void
     {
-        self::assertSame($expected, new TagNormalizer()->normalize($tag));
+        self::assertSame($expected, (new TagNormalizer())->normalize($tag));
     }
 
     /**

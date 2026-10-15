@@ -20,7 +20,7 @@ final class DiProvider
     public function __construct()
     {
         $builder = new ContainerBuilder();
-        if (getenv('APP_ENV') !== 'dev') {
+        if (Environment::get('APP_ENV') !== 'dev') {
             $builder->enableCompilation(__DIR__ . '/../../data/cache/di');
             $builder->writeProxiesToFile(true, __DIR__ . '/../../data/cache/proxies');
         }
@@ -58,12 +58,15 @@ final class DiProvider
                     'base_uri' => 'https://api.github.com',
                     'headers' => [
                         'Accept' => 'application/vnd.github.v3+json',
-                        'Authorization' => "Bearer " . getenv('GITHUB_API_KEY'),
+                        'Authorization' => 'Bearer '
+                            . Environment::get('GITHUB_API_KEY'),
                     ]
                 ]);
             },
             CacheItemPoolInterface::class => function (ContainerInterface $container): CacheItemPoolInterface {
-                return new FileCacheItemPool((string) getenv('CACHE_BASE_DIR'));
+                return new FileCacheItemPool(
+                    Environment::get('CACHE_BASE_DIR')
+                );
             }
         ];
     }
