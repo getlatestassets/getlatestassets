@@ -27,7 +27,7 @@ final class FileCacheItemPool implements CacheItemPoolInterface
         /**
          * @var array{
          *     data: mixed,
-         *     expires: string
+         *     expires?: string
          * } $data
          */
         $data = json_decode($item, true);

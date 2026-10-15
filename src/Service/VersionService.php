@@ -45,10 +45,10 @@ class VersionService
         }
 
         usort($candidates, function (Release $a, Release $b) {
-            if (Comparator::greaterThan($a->getNormalizedVersion(), $b->getNormalizedVersion())) {
+            if (Comparator::greaterThan($a->getNormalizedVersion() ?? '', $b->getNormalizedVersion() ?? '')) {
                 return -1;
             }
-            if (Comparator::lessThan($a->getNormalizedVersion(), $b->getNormalizedVersion())) {
+            if (Comparator::lessThan($a->getNormalizedVersion() ?? '', $b->getNormalizedVersion() ?? '')) {
                 return 1;
             }
 

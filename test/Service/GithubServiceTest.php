@@ -28,25 +28,27 @@ class GithubServiceTest extends TestCase
 {
     public function testInstantiation(): void
     {
-        $client = $this->getMockBuilder(Client::class)->getMock();
-        $versionService = $this->getMockBuilder(VersionService::class)->getMock();
-        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
-        $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
+        $client = self::createStub(Client::class);
+        $versionService = self::createStub(VersionService::class);
+        $convertService = self::createStub(ConvertGithubReleaseListService::class);
+        $caching = self::createStub(CacheItemPoolInterface::class);
 
         $service = new GithubService($client, $versionService, $convertService, $caching);
 
+		// @phpstan-ignore staticMethod.alreadyNarrowedType,instanceof.alwaysTrue
         self::assertTrue($service instanceof GithubService);
     }
 
     public function testServiceThrowsUpOnClientException(): void
     {
-        $client = $this->getMockBuilder(Client::class)->getMock();
-        $client->method('get')
-               ->with('repos/tonymanero/manero/releases')
-               ->willThrowException( new \Exception());
-        $versionService = $this->getMockBuilder(VersionService::class)->getMock();
-        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
-        $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
+        $client = $this->createMock(Client::class);
+        $client->expects(self::once())
+               ->method('get')
+               ->with('/repos/tonymanero/manero/releases')
+               ->willThrowException(new \Exception());
+        $versionService = self::createStub(VersionService::class);
+        $convertService = self::createStub(ConvertGithubReleaseListService::class);
+        $caching = self::createStub(CacheItemPoolInterface::class);
 
         $service = new GithubService($client, $versionService, $convertService, $caching);
 
@@ -56,32 +58,35 @@ class GithubServiceTest extends TestCase
 
     public function testService(): void
     {
-        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
+        $response = self::createStub(ResponseInterface::class);
         $response->method('getHeader')->willReturn(['<url>; rel="alternate"; hreflang="en"']);
 
-        $client = $this->getMockBuilder(Client::class)->getMock();
-        $client->method('get')
+        $client = $this->createMock(Client::class);
+        $client->expects(self::once())
+               ->method('get')
                ->with('/repos/tonymanero/manero/releases')
                ->willReturn($response);
 
         $releaseList = new ReleaseList();
 
         $newReleaseList = new ReleaseList();
-        $release = new Release('1.0.0', new AssetUrl('name', 'http://example.com/foo?bar=baz#foob'));
+        $release = new Release('1.0.0', '1.0.0', new AssetUrl('name', 'http://example.com/foo?bar=baz#foob'));
         $newReleaseList->addRelease($release);
 
-        $convertService = $this->getMockBuilder(ConvertGithubReleaseListService::class)->getMock();
-        $convertService->method('addToReleaseList')
+        $convertService = $this->createMock(ConvertGithubReleaseListService::class);
+        $convertService->expects(self::once())
+                       ->method('addToReleaseList')
                        ->with($releaseList, $response)
                        ->willReturn($newReleaseList);
 
 
-        $versionService = $this->getMockBuilder(VersionService::class)->getMock();
-        $versionService->method('getLatestAssetForConstraintFromResult')
+        $versionService = $this->createMock(VersionService::class);
+        $versionService->expects(self::once())
+                       ->method('getLatestAssetForConstraintFromResult')
                        ->with($newReleaseList, null)
                        ->willReturn($release);
 
-        $caching = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
+        $caching = self::createStub(CacheItemPoolInterface::class);
         $item = new CacheItem('whatever', '', new \DateTimeImmutable('-1 hour'));
 
         $caching->method('getItem')->willReturn($item);

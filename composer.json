@@ -33,8 +33,8 @@
     "require": {
         "php": "^8.3",
         "composer/semver": "^3.4",
-        "guzzlehttp/guzzle": "^7.8",
-        "guzzlehttp/psr7": "^2",
+        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/psr7": "^2.7",
         "org_heigl/trait-iterator": "^1.0",
         "php-di/php-di": "^6.4",
         "php-di/slim-bridge": "^3.4",

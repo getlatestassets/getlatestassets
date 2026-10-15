@@ -34,7 +34,7 @@ class GithubService
         string $user,
         string $project,
         string $file,
-        string $constraint = null
+        ?string $constraint = null
     ) : Uri {
         $cache = $this->cacheItemPool->getItem('github_' . $user . '_' . $project);
         if (! $cache->isHit()) {

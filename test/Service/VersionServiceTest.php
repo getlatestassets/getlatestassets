@@ -2,6 +2,7 @@
 
 namespace Org_Heigl\GetLatestAssetsTest\Service;
 
+use Org_Heigl\GetLatestAssets\Domain\TagNormalizer;
 use Org_Heigl\GetLatestAssets\Exception\NoAssetMatchingConstraintFound;
 use Org_Heigl\GetLatestAssets\Release\Release;
 use Org_Heigl\GetLatestAssets\Release\ReleaseList;
@@ -25,9 +26,12 @@ class VersionServiceTest extends TestCase
     ): void {
         $array = [];
         $releaseList = new ReleaseList();
+        $normalizer = new TagNormalizer();
         foreach ($list as $key => $version) {
-            $array[$key] = $this->getMockBuilder(Release::class)->disableOriginalConstructor()->getMock();
+            $array[$key] = self::createStub(Release::class);
             $array[$key]->method('getVersion')->willReturn($version);
+            $array[$key]->method('getNormalizedVersion')
+                ->willReturn($normalizer->normalize($version));
             $releaseList->addRelease($array[$key]);
         }
 
