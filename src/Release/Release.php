@@ -19,11 +19,11 @@ class Release
     private array $assetUrls;
 
     public function __construct(string $version, ?string $normalizedVersion, AssetUrl ...$assetUrls)
-	{
-		$this->version = $version;
-		$this->assetUrls = $assetUrls;
-		$this->normalizedVersion = $normalizedVersion;
-	}
+    {
+        $this->version = $version;
+        $this->assetUrls = $assetUrls;
+        $this->normalizedVersion = $normalizedVersion;
+    }
 
     public function getVersion() : string
     {

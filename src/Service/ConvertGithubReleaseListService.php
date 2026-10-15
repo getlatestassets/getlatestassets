@@ -23,7 +23,7 @@ class ConvertGithubReleaseListService
          * }[] $json
          */
         $json = json_decode($response->getBody()->getContents(), true);
-		$tagNormalizer = new TagNormalizer();
+        $tagNormalizer = new TagNormalizer();
         foreach ($json as $release) {
             if (empty($release['assets'])) {
                 continue;
