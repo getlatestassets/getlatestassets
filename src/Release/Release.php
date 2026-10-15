@@ -11,15 +11,18 @@ class Release
 {
     private string $version;
 
+    private ?string $normalizedVersion;
+
     /**
      * @var AssetUrl[]
      */
     private array $assetUrls;
 
-    public function __construct(string $version, AssetUrl ...$assetUrls)
+    public function __construct(string $version, ?string $normalizedVersion, AssetUrl ...$assetUrls)
     {
         $this->version = $version;
         $this->assetUrls = $assetUrls;
+        $this->normalizedVersion = $normalizedVersion;
     }
 
     public function getVersion() : string
@@ -58,5 +61,10 @@ class Release
             'The asset %s could not be found',
             $name
         ));
+    }
+
+    public function getNormalizedVersion() : ?string
+    {
+        return $this->normalizedVersion;
     }
 }

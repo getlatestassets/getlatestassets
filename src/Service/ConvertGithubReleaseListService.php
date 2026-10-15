@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Org_Heigl\GetLatestAssets\Service;
 
 use Org_Heigl\GetLatestAssets\AssetUrl;
+use Org_Heigl\GetLatestAssets\Domain\TagNormalizer;
 use Org_Heigl\GetLatestAssets\Release\Release;
 use Org_Heigl\GetLatestAssets\Release\ReleaseList;
 use Psr\Http\Message\ResponseInterface;
@@ -22,6 +23,7 @@ class ConvertGithubReleaseListService
          * }[] $json
          */
         $json = json_decode($response->getBody()->getContents(), true);
+        $tagNormalizer = new TagNormalizer();
         foreach ($json as $release) {
             if (empty($release['assets'])) {
                 continue;
@@ -34,7 +36,7 @@ class ConvertGithubReleaseListService
                 $files[] = new AssetUrl($asset['name'], $asset['browser_download_url']);
             }
 
-            $list->addRelease(new Release($version, ...$files));
+            $list->addRelease(new Release($version, $tagNormalizer->normalize($version), ...$files));
         }
         return $list;
     }

@@ -17,10 +17,10 @@ class ConvertGithubReleaseListServiceTest extends TestCase
 {
     public function testGetReleaseList(): void
     {
-        $body = $this->getMockBuilder(StreamInterface::class)->getMock();
+        $body = self::createStub(StreamInterface::class);
         $body->method('getContents')->willReturn(file_get_contents(__DIR__ . '/_assets/githubReleaseList.json'));
 
-        $interface = $this->getMockBuilder(ResponseInterface::class)->getMock();
+        $interface = self::createStub(ResponseInterface::class);
         $interface->method('getBody')->willReturn($body);
         $service = new ConvertGithubReleaseListService();
 
@@ -30,12 +30,12 @@ class ConvertGithubReleaseListServiceTest extends TestCase
         self::assertInstanceOf(ReleaseList::class, $releases);
 
         self::assertEquals(
-            new Release('0.2.1', new AssetUrl('manero.phar', 'https://github.com/tonymanero/manero/releases/download/0.2.1/manero.phar')),
+            new Release('0.2.1', '0.2.1', new AssetUrl('manero.phar', 'https://github.com/tonymanero/manero/releases/download/0.2.1/manero.phar')),
             $releases->current()
         );
         $releases->next();
         self::assertEquals(
-            new Release('0.1.1', new AssetUrl('manero.phar', 'https://github.com/tonymanero/manero/releases/download/0.1.1/manero.phar')),
+            new Release('0.1.1', '0.1.1', new AssetUrl('manero.phar', 'https://github.com/tonymanero/manero/releases/download/0.1.1/manero.phar')),
             $releases->current()
         );
         $releases->next();

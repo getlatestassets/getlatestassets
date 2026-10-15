@@ -58,12 +58,12 @@ final class DiProvider
                     'base_uri' => 'https://api.github.com',
                     'headers' => [
                         'Accept' => 'application/vnd.github.v3+json',
-                        'Authorization' => "Bearer " . ($_ENV['GITHUB_API_KEY']??''),
+                        'Authorization' => "Bearer " . getenv('GITHUB_API_KEY'),
                     ]
                 ]);
             },
             CacheItemPoolInterface::class => function (ContainerInterface $container): CacheItemPoolInterface {
-                return new FileCacheItemPool($_ENV['CACHE_BASE_DIR']);
+                return new FileCacheItemPool((string) getenv('CACHE_BASE_DIR'));
             }
         ];
     }
