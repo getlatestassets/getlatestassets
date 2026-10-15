@@ -36,7 +36,7 @@
         "guzzlehttp/guzzle": "^7.9",
         "guzzlehttp/psr7": "^2.7",
         "org_heigl/trait-iterator": "^1.0",
-        "php-di/php-di": "^6.4",
+        "php-di/php-di": "^7.1",
         "php-di/slim-bridge": "^3.4",
         "psr/cache": "^3.0",
         "roave/security-advisories": "dev-master",
