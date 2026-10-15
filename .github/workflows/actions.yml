@@ -34,9 +34,19 @@ jobs:
         run: ./tools/vendor/bin/phpcs
   test:
     runs-on: ubuntu-latest
-    name: Test
+    name: Test (PHP ${{ matrix.php }})
     permissions:
       contents: read # checkout
+    # PHP 8.6 is not released yet, so failures there must not block merging
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4", "8.5"]
+        experimental: [false]
+        include:
+          - php: "8.6"
+            experimental: true
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -45,8 +55,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
-          php-version: 8.5
-          coverage: xdebug
+          php-version: ${{ matrix.php }}
+          coverage: none
       - name: Download PHPUnit
         run: |
           mkdir -p tools
@@ -55,7 +65,7 @@ jobs:
       - name: Install
         run: composer install
       - name: test
-        run: ./tools/vendor/bin/phpunit --colors=always
+        run: ./tools/vendor/bin/phpunit --colors=always --no-coverage
   analyze:
     name: Static analysis
     runs-on: ubuntu-latest

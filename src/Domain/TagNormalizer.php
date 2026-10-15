@@ -33,7 +33,7 @@ final class TagNormalizer
         }
 
         try {
-            new VersionParser()->normalize($version);
+            (new VersionParser())->normalize($version);
         } catch (UnexpectedValueException) {
             return null;
         }
