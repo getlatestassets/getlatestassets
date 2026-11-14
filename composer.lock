@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a31d20ff5296d140be01855337d91ad9",
+    "content-hash": "d6fc13fbab9282792e531a524e7de148",
     "packages": [
         {
             "name": "composer/semver",
@@ -645,20 +645,23 @@
         },
         {
             "name": "org_heigl/trait-iterator",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heiglandreas/IteratorTrait.git",
-                "reference": "7212ccb314f4733600e64dd2d912d7700d01b380"
+                "reference": "20ee1a4deb76047865af1176bef374a9a6f19054"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heiglandreas/IteratorTrait/zipball/7212ccb314f4733600e64dd2d912d7700d01b380",
-                "reference": "7212ccb314f4733600e64dd2d912d7700d01b380",
+                "url": "https://api.github.com/repos/heiglandreas/IteratorTrait/zipball/20ee1a4deb76047865af1176bef374a9a6f19054",
+                "reference": "20ee1a4deb76047865af1176bef374a9a6f19054",
                 "shasum": ""
             },
+            "require": {
+                "php": "^8.2"
+            },
             "require-dev": {
-                "phpunit/phpunit": "^5.5"
+                "phpunit/phpunit": "^12.0"
             },
             "type": "library",
             "autoload": {
@@ -684,9 +687,9 @@
             ],
             "support": {
                 "issues": "https://github.com/heiglandreas/IteratorTrait/issues",
-                "source": "https://github.com/heiglandreas/IteratorTrait/tree/master"
+                "source": "https://github.com/heiglandreas/IteratorTrait/tree/1.2.0"
             },
-            "time": "2016-09-29T18:45:44+00:00"
+            "time": "2026-11-14T18:39:37+00:00"
         },
         {
             "name": "php-di/invoker",
