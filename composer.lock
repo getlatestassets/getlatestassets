@@ -645,16 +645,16 @@
         },
         {
             "name": "org_heigl/trait-iterator",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heiglandreas/IteratorTrait.git",
-                "reference": "20ee1a4deb76047865af1176bef374a9a6f19054"
+                "reference": "5061b046c4ca09795864c5f1924a222e5af01c81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heiglandreas/IteratorTrait/zipball/20ee1a4deb76047865af1176bef374a9a6f19054",
-                "reference": "20ee1a4deb76047865af1176bef374a9a6f19054",
+                "url": "https://api.github.com/repos/heiglandreas/IteratorTrait/zipball/5061b046c4ca09795864c5f1924a222e5af01c81",
+                "reference": "5061b046c4ca09795864c5f1924a222e5af01c81",
                 "shasum": ""
             },
             "require": {
@@ -687,9 +687,9 @@
             ],
             "support": {
                 "issues": "https://github.com/heiglandreas/IteratorTrait/issues",
-                "source": "https://github.com/heiglandreas/IteratorTrait/tree/1.2.0"
+                "source": "https://github.com/heiglandreas/IteratorTrait/tree/1.2.1"
             },
-            "time": "2026-11-14T18:39:37+00:00"
+            "time": "2026-11-14T18:58:48+00:00"
         },
         {
             "name": "php-di/invoker",
